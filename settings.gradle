@@ -1,3 +1,4 @@
 rootProject.name = 'platform-parent'
 
 include 'shared-lib'
+include 'tenant-management'

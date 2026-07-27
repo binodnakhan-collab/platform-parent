@@ -20,6 +20,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -162,8 +163,9 @@ public class GlobalExceptionHandler {
         return ResponseBuilder.error(
                 HttpStatus.METHOD_NOT_ALLOWED,
                 PlatformErrorCode.METHOD_NOT_ALLOWED.name(),
-                PlatformErrorCode.METHOD_NOT_ALLOWED.getMessage(),
-                ex.getMethod() + " is not supported for this endpoint");
+                ex.getMethod() + " is not supported for this endpoint",
+                PlatformErrorCode.GENERIC_ERROR_MESSAGE.getMessage()
+                );
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -196,7 +198,7 @@ public class GlobalExceptionHandler {
                 HttpStatus.INTERNAL_SERVER_ERROR,
                 PlatformErrorCode.INTERNAL_ERROR.name(),
                 PlatformErrorCode.INTERNAL_ERROR.getMessage(),
-                "Something went wrong. Please try again later or contact support with the traceId.");
+                PlatformErrorCode.GENERIC_ERROR_MESSAGE.getMessage());
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
@@ -206,7 +208,17 @@ public class GlobalExceptionHandler {
                 HttpStatus.NOT_FOUND,
                 PlatformErrorCode.ROUTE_NOT_FOUND.name(),
                 PlatformErrorCode.RESOURCE_NOT_FOUND.getMessage(),
-                "Something went wrong. Please try again later or contact support with the traceId.");
+                PlatformErrorCode.GENERIC_ERROR_MESSAGE.getMessage());
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ApiResponse<ErrorData>> handleMissingHeaderException(MissingRequestHeaderException ex) {
+        log.error("Missing header", ex);
+        return ResponseBuilder.error(
+                HttpStatus.BAD_REQUEST,
+                PlatformErrorCode.MISSING_HEADER.name(),
+                PlatformErrorCode.MISSING_HEADER.getMessage(),
+                PlatformErrorCode.GENERIC_ERROR_MESSAGE.getMessage());
     }
 
 

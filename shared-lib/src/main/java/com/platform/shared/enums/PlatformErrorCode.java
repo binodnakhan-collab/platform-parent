@@ -18,18 +18,24 @@ public enum PlatformErrorCode implements ErrorCode {
     UNSUPPORTED_MEDIA_TYPE("REQ003", "Request content type is not supported"),
     DUPLICATE_RESOURCE("RES002", "Resource already exists"),
     DOWNSTREAM_ERROR("EXT001", "An upstream/downstream service call failed"),
-    INTERNAL_ERROR("SYS001", "An unexpected error occurred");
+    INTERNAL_ERROR("SYS001", "An unexpected error occurred"),
+    MISSING_HEADER("HED001", "Header is required."),
+    GENERIC_ERROR_MESSAGE("GEN001", "Something went wrong. Please try again later or contact support with the traceId.");
 
+    private final String code;
+    private final String message;
     PlatformErrorCode(String code, String message) {
+        this.code = code;
+        this.message = message;
     }
 
     @Override
     public String getCode() {
-        return "";
+        return code;
     }
 
     @Override
     public String getMessage() {
-        return "";
+        return message;
     }
 }

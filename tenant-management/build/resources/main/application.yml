@@ -1,0 +1,67 @@
+spring:
+  application:
+    name: authentication-management
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:platform}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: ${DB_DRIVER:org.postgresql.Driver}
+
+    hikari:
+      maximum-pool-size: ${DB_POOL_MAX:15}
+      minimum-idle: ${DB_POOL_MIN:5}
+      connection-timeout: ${DB_CONN_TIMEOUT:30000}
+      idle-timeout: ${DB_IDLE_TIMEOUT:600000}
+      max-lifetime: ${DB_MAX_LIFETIME:1800000}
+    dbcp2:
+      default-schema: tenant_management
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: ${DB_DDL_AUTO:none}
+    show-sql: ${DB_SHOW_SQL:false}
+    properties:
+      hibernate:
+        format_sql: true
+        jdbc:
+          batch_size: 50
+        order_inserts: true
+        order_updates: true
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    default-schema: tenant_management
+    baseline-description: << Tenant Management Flyway Baseline >
+    validate-on-migrate: true
+    clean-disabled: true
+    encoding: UTF-8
+    sql-migration-prefix: V
+    sql-migration-separator: __
+    sql-migration-suffixes:
+      - .sql
+    repeatable-sql-migration-prefix: R
+
+server:
+  port: ${SERVER_PORT:8000}
+management:
+  server:
+    port: ${MANAGEMENT_PORT:8000}
+  endpoints:
+    web:
+      exposure:
+        include: ${ACTUATOR_ENDPOINTS:health,info,prometheus,metrics,env,loggers}
+        exclude: shutdown,beans
+      base-path: ${ACTUATOR_BASE_PATH:/actuator}
+  endpoint:
+    health:
+      show-details: ${HEALTH_DETAILS:always}
+
+logging:
+  level:
+    root: ${LOG_ROOT:INFO}
+    org.springframework.web: ${LOG_SPRING_WEB:INFO}
+    org.hibernate.SQL: ${LOG_HIBERNATE_SQL:WARN}
+    org.hibernate.type.descriptor.sql.BasicBinder: ${LOG_HIBERNATE_BINDER:TRACE}
+  pattern:
+    console: "%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(%5p) %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n%wEx"

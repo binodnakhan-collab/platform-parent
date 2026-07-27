@@ -2,6 +2,7 @@ package com.platform.shared.payload.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,6 +18,7 @@ import java.time.Instant;
         "data"
 })
 @Builder
+@AllArgsConstructor
 public final class ApiResponse<T> {
 
     private final boolean success;
