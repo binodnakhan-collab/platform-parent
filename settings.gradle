@@ -1,0 +1,3 @@
+rootProject.name = 'platform-parent'
+
+include 'shared-lib'
