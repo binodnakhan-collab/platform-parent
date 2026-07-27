@@ -4,9 +4,11 @@ import com.platform.shared.constrains.UuidValue;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
-public class UuidValueValidator implements ConstraintValidator<UuidValue, Object> {
+public class UuidValueValidator implements BeanValidator<UuidValue, Object> {
 
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext context) {
@@ -35,5 +37,10 @@ public class UuidValueValidator implements ConstraintValidator<UuidValue, Object
         }
 
         return false;
+    }
+
+    @Override
+    public List<Function<Object, Boolean>> buildValidatorChain(ConstraintValidatorContext context) {
+        return List.of();
     }
 }

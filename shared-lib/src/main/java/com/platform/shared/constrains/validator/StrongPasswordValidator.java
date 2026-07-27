@@ -4,8 +4,10 @@ import com.platform.shared.constrains.StrongPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
-public class StrongPasswordValidator
-        implements ConstraintValidator<StrongPassword, String> {
+import java.util.List;
+import java.util.function.Function;
+
+public class StrongPasswordValidator implements BeanValidator<StrongPassword, String> {
 
     private int minLength;
     private boolean upperCase;
@@ -52,5 +54,10 @@ public class StrongPasswordValidator
         }
 
         return true;
+    }
+
+    @Override
+    public List<Function<String, Boolean>> buildValidatorChain(ConstraintValidatorContext context) {
+        return List.of();
     }
 }

@@ -20,4 +20,13 @@ public final class UserContext {
     public static void clear() {
         CURRENT_USER.remove();
     }
+
+    public static void runWith(CurrentUser user, Runnable action) {
+        set(user);
+        try {
+            action.run();
+        } finally {
+            clear();
+        }
+    }
 }
