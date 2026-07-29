@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/identity-access-management/platform-parent.identity-access-management.main.iml" filepath="$PROJECT_DIR$/.idea/modules/identity-access-management/platform-parent.identity-access-management.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/shared-lib/platform-parent.shared-lib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/shared-lib/platform-parent.shared-lib.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/tenant-management/platform-parent.tenant-management.main.iml" filepath="$PROJECT_DIR$/.idea/modules/tenant-management/platform-parent.tenant-management.main.iml" />
+    </modules>
+  </component>
+</project>
