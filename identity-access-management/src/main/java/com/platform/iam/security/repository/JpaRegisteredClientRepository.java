@@ -8,12 +8,17 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.platform.iam.entity.Client;
 import com.platform.iam.repository.ClientRepository;
+import com.platform.shared.enums.PlatformErrorCode;
+import com.platform.shared.payload.response.ResponseBuilder;
 import jakarta.annotation.Nonnull;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.jackson2.SecurityJackson2Modules;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
+import org.springframework.security.oauth2.core.OAuth2Error;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.jackson2.OAuth2AuthorizationServerJackson2Module;
@@ -87,6 +92,8 @@ public class JpaRegisteredClientRepository implements RegisteredClientRepository
         RegisteredClient client = this.clientRepository.findByClientId(clientId).map(this::toObject).orElse(null);
         if (client == null) {
             log.error("Client {} is not found.", clientId);
+            ResponseBuilder.sendError(HttpStatus.UNAUTHORIZED, PlatformErrorCode.UNAUTHORIZED.name(), "Client not found.", PlatformErrorCode.UNAUTHORIZED.getMessage());
+
         }
         return client;
     }

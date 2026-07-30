@@ -26,7 +26,7 @@ INSERT INTO identity_access_management.clients (
              'refresh_token,client_credentials,authorization_code,custom_password',
              'http://127.0.0.1:8080/login/oauth2/code/client',
              '',
-             'read,profile',
+             'read,profile,openid',
              '{"@class":"java.util.Collections$UnmodifiableMap","settings.client.require-proof-key":true,"settings.client.require-authorization-consent":true}',
              '{"@class":"java.util.Collections$UnmodifiableMap","settings.token.reuse-refresh-tokens":true,"settings.token.access-token-time-to-live":["java.time.Duration",300.000000000],"settings.token.access-token-format":{"@class":"org.springframework.security.oauth2.server.authorization.settings.OAuth2TokenFormat","value":"reference"},"settings.token.refresh-token-time-to-live":["java.time.Duration",3600.000000000],"settings.token.authorization-code-time-to-live":["java.time.Duration",300.000000000]}'
          )

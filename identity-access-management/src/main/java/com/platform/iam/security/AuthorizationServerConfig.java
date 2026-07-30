@@ -7,7 +7,6 @@ import com.platform.iam.security.provider.CustomGrantPasswordAuthenticationProvi
 import com.platform.iam.security.service.CustomUserDetailService;
 import com.platform.iam.security.service.JpaOAuth2AuthorizationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -23,7 +22,6 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @RequiredArgsConstructor
-@ConditionalOnProperty(name = "app.auth.provider", havingValue = "oauth")
 public class AuthorizationServerConfig {
 
     private final OauthExceptionHandler oauthExceptionHandler;

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.platform.iam.exception.CustomAuthenticationEntryPoint;
 import com.platform.iam.security.converter.CustomOpaqueTokenAuthenticationConverter;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -18,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true)
-@ConditionalOnProperty(name = "app.auth.provider", havingValue = "oauth")
 public class SecurityConfig {
 
     private final ObjectMapper objectMapper;

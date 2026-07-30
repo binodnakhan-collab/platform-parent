@@ -69,3 +69,8 @@ app:
   auth:
     token:
       type: jwt
+
+oauth:
+  clientId: client
+  secret: secret
+  introspectUri: http://localhost:8000/oauth2/introspect

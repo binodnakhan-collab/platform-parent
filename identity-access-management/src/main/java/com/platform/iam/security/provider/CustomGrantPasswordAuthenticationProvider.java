@@ -129,7 +129,7 @@ public class CustomGrantPasswordAuthenticationProvider implements Authentication
 
         OAuth2Authorization.Builder authorizationBuilder = OAuth2Authorization.withRegisteredClient(registeredClient)
                 .attribute(Principal.class.getName(), usernamePasswordAuthenticationToken)
-                .principalName(clientPrincipal.getName())
+                .principalName(usernamePasswordAuthenticationToken.getName())
                 .authorizationGrantType(GRANT_PASSWORD)
                 .authorizedScopes(registeredClient.getScopes());
 
@@ -140,7 +140,6 @@ public class CustomGrantPasswordAuthenticationProvider implements Authentication
             authorizationBuilder.accessToken(accessToken);
         }
 
-        // Generate Refresh Token
         OAuth2RefreshToken refreshToken = null;
         if (registeredClient.getAuthorizationGrantTypes().contains(AuthorizationGrantType.REFRESH_TOKEN)
                 && !clientPrincipal.getClientAuthenticationMethod().equals(ClientAuthenticationMethod.NONE)) {

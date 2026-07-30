@@ -28,40 +28,50 @@ public class SwitchableOAuth2TokenGenerator implements OAuth2TokenGenerator<OAut
 
     @Override
     public OAuth2Token generate(OAuth2TokenContext context) {
-        // Handle Refresh Tokens normally (they are always opaque)
         if (OAuth2TokenType.REFRESH_TOKEN.equals(context.getTokenType())) {
             return refreshTokenGenerator.generate(context);
         }
 
-        if (context instanceof DefaultOAuth2TokenContext defaultContext) {
-            RegisteredClient registeredClient = defaultContext.getRegisteredClient();
-            if (registeredClient != null) {
+        RegisteredClient registeredClient = context.getRegisteredClient();
 
-                // 1. Override the TokenSettings to force JWT or Opaque based on our YAML property
-                TokenSettings newTokenSettings = TokenSettings.builder()
-                        .accessTokenFormat(useJwt ? OAuth2TokenFormat.SELF_CONTAINED : OAuth2TokenFormat.REFERENCE)
-                        .build();
+        TokenSettings newTokenSettings = TokenSettings.builder()
+                .accessTokenFormat(useJwt ? OAuth2TokenFormat.SELF_CONTAINED : OAuth2TokenFormat.REFERENCE)
+                .build();
 
-                RegisteredClient newClient = RegisteredClient.from(registeredClient)
-                        .tokenSettings(newTokenSettings)
-                        .build();
+        RegisteredClient newClient = RegisteredClient.from(registeredClient)
+                .tokenSettings(newTokenSettings)
+                .build();
 
-                // 2. Rebuild the context manually, explicitly passing the tokenType so it isn't lost!
-                DefaultOAuth2TokenContext newContext = DefaultOAuth2TokenContext.builder()
-                        .registeredClient(newClient)
-                        .principal(defaultContext.getPrincipal())
-                        .authorizationServerContext(defaultContext.getAuthorizationServerContext())
-                        .authorizedScopes(defaultContext.getAuthorizedScopes())
-                        .authorizationGrantType(defaultContext.getAuthorizationGrantType())
-                        .authorizationGrant(defaultContext.getAuthorizationGrant())
-                        .tokenType(defaultContext.getTokenType())
-                        .build();
+        OAuth2TokenContext newContext = new ClientOverridingTokenContext(context, newClient);
 
-                // 3. Delegate to the correct Spring generator
-                return useJwt ? jwtGenerator.generate(newContext) : opaqueGenerator.generate(newContext);
-            }
+        return useJwt ? jwtGenerator.generate(newContext) : opaqueGenerator.generate(newContext);
+    }
+
+    private static final class ClientOverridingTokenContext implements OAuth2TokenContext {
+
+        private final OAuth2TokenContext delegate;
+        private final RegisteredClient overrideClient;
+
+        ClientOverridingTokenContext(OAuth2TokenContext delegate, RegisteredClient overrideClient) {
+            this.delegate = delegate;
+            this.overrideClient = overrideClient;
         }
 
-        return useJwt ? jwtGenerator.generate(context) : opaqueGenerator.generate(context);
+        @SuppressWarnings("unchecked")
+        @Override
+        public <V> V get(Object key) {
+            if (RegisteredClient.class.equals(key)) {
+                return (V) overrideClient;
+            }
+            return delegate.get(key);
+        }
+
+        @Override
+        public boolean hasKey(Object key) {
+            if (RegisteredClient.class.equals(key)) {
+                return true;
+            }
+            return delegate.hasKey(key);
+        }
     }
 }
